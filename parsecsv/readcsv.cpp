@@ -50,30 +50,19 @@ void parseCSV(string filename, CSVData &csvdata) {
             line2vec_str(line, ",", csvdata.line1);
         } else if (linecount == 2) {
             line2vec_str(line, ",", csvdata.line2);
+            if (csvdata.line1.size() != csvdata.line2.size()) {
+                cerr << "Error: the lengths of line 1 and line 2 do not match \n";
+                return;
+            }
         } else {
             vector<double> vec; 
             line2vec_double(line, ",", vec);
+            if (csvdata.line1.size() != vec.size()) {
+                cerr << "Error: the lengths of line 1 and line " << linecount << " do not match \n";
+                return;
+            }
             csvdata.vec2d.push_back(vec);
         }
     }
 
 }
-
-// int main(int argc, char **argv) {
-//     CSVData csvdata;
-//     parseCSV("sample.csv", csvdata);
-//     for (string str: csvdata.line1) {
-//         cout << " " << str;
-//     }
-//     cout << '\n';
-//     for (string str: csvdata.line2) {
-//         cout << ' ' << str;
-//     }
-//     cout << '\n';
-//     for (vector<double> vec: csvdata.vec2d) {
-//         for (double d : vec) {
-//             cout <<  " " << d;
-//         }
-//         cout << '\n';
-//     }  
-// }
