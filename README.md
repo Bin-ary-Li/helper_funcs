@@ -20,11 +20,13 @@ This function parses a CSV file into a custom data structure called CSVData. Cal
 __Example__
 
 ```
-CSVData csvdata;
-parseCSV("sample.csv", csvdata);
-for (vector<double> vec: csvdata.vec2d) {
-    for (double val : vec) {
-        // do something on the val
+int main() {
+    CSVData csvdata;
+    parseCSV("sample.csv", csvdata);
+    for (vector<double> vec: csvdata.vec2d) {
+        for (double val : vec) {
+            // do something on the val
+        }
     }
 }
 ```
