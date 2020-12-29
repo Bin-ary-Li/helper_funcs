@@ -10,12 +10,12 @@ ifeq ($(detected_OS),Windows)
 	cleanup := \rm -f *.obj main.exe
 else ifeq ($(detected_OS),Linux) 
 	CC := g++
-	CFLAGS := -std=c++14 -lstdc++fs
-	cleanup := \rm -f *.o main *~ *#
+	CFLAGS := -std=c++14 -lstdc++fs -o main.out
+	cleanup := \rm -f *.o main.out
 else ifeq ($(detected_OS),Darwin) 
 	CC := g++
-	CFLAGS := -std=c++14 -lstdc++fs
-	cleanup := \rm -f *.o main *~ *#
+	CFLAGS := -std=c++14 -o main.out
+	cleanup := \rm -f *.o main.out
 else
 	echo "No recognizing OS"
 	exit 1

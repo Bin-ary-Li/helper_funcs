@@ -12,7 +12,7 @@ static void line2vec_str(string line, string delim, vector<string> &vec) {
     vec.push_back(line);
 }
 
-static void line2vec_double(string line, string delim, vector<double> &vec) {
+static int line2vec_double(string line, string delim, vector<double> &vec) {
     size_t pos = 0;
     double token;
     while ((pos = line.find(delim)) != string::npos) {
@@ -20,7 +20,7 @@ static void line2vec_double(string line, string delim, vector<double> &vec) {
             token = stod(line.substr(0, pos));
         } catch (const invalid_argument) {
             std::cerr << "Argument is invalid, fail to convert " << line.substr(0, pos) << " to double\n";
-            return;
+            return 1;
         }
         vec.push_back(token);
         line.erase(0, pos + delim.length());
@@ -29,17 +29,18 @@ static void line2vec_double(string line, string delim, vector<double> &vec) {
         token = stod(line);
     } catch (const invalid_argument) {
         std::cerr << "Argument is invalid, fail to convert to double\n";
-        return;
+        return 1;
     }
     vec.push_back(token);
+    return 0;
 }
 
-
-void parseCSV(string filename, CSVData &csvdata) {
+// return 0 upon success
+int parseCSV(string filename, CSVData &csvdata) {
     ifstream fp(filename);
     if(!fp.is_open()) {
         cerr << "failed to open " << filename << '\n';
-        return;
+        return 1;
     }
 
     int linecount = 0;
@@ -52,17 +53,21 @@ void parseCSV(string filename, CSVData &csvdata) {
             line2vec_str(line, ",", csvdata.line2);
             if (csvdata.line1.size() != csvdata.line2.size()) {
                 cerr << "Error: the lengths of line 1 and line 2 do not match \n";
-                return;
+                return 1;
             }
         } else {
             vector<double> vec; 
-            line2vec_double(line, ",", vec);
+            int err = line2vec_double(line, ",", vec);
+            if (err) {
+                return 1; 
+            }
             if (csvdata.line1.size() != vec.size()) {
                 cerr << "Error: the lengths of line 1 and line " << linecount << " do not match \n";
-                return;
+                return 1;
             }
             csvdata.vec2d.push_back(vec);
         }
     }
 
+    return 0;
 }

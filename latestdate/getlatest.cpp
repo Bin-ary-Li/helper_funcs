@@ -58,7 +58,7 @@ static bool isValidDT (const DateTime &dt) {
 
 // find date information in a string and fill up the DateTime object, return true upon success
 static bool getdate (string str, DateTime &dt) {
-    regex date("\\d{4}\\.\\d{2}.\\d{2}\\_\\d{2}.\\d{2}.\\d{2}");
+    regex date("[0-9]{4}.[0-9]{2}.[0-9]{2}[_][0-9]{2}.[0-9]{2}.[0-9]{2}");
     smatch match; 
     int matchcount = 0;
     regex_search(str, match, date);

@@ -1,4 +1,5 @@
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
+#define _LIBCPP_NO_EXPERIMENTAL_DEPRECATION_WARNING_FILESYSTEM
 #include <iostream>
 #include <unordered_set>
 #include <experimental/filesystem> 
