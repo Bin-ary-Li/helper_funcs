@@ -7,8 +7,8 @@ endif
 ifeq ($(detected_OS),Windows)
 	files := main.cpp winEnumIP.cpp findip.cpp
 	CC := cl
-	CFLAGS := /EHsc
-	cleanup := \rm -f *.obj main.exe *~ *#
+	CFLAGS := /Fe:main
+	cleanup := \rm -f *.obj main.exe
 else ifeq ($(detected_OS),Linux) 
 	CC = g++
 	CFLAGS = -std=c++14
@@ -21,6 +21,6 @@ else
 endif
 
 main: $(files)
-	$(CC) $(files) $(CFLAGS)
+	$(CC) $(CFLAGS) $(files)
 clean:
 	$(cleanup)
