@@ -1,51 +1,58 @@
 #include "winEnumIP.h"
 
-/* Note: could also use malloc() and free() */
-
-int main()
-{
-
-// Declare and initialize variables
-    PIP_INTERFACE_INFO pInfo = NULL;
-    ULONG ulOutBufLen = 0;
-
-    DWORD dwRetVal = 0;
-    int iReturn = 1;
-
+// store ipv4 address detected in network interface, return 0 if success
+int getipv4addr(vector<string> &addresses) {
     int i;
+    
+    /* Variables used by GetIpAddrTable */
+    PMIB_IPADDRTABLE pIPAddrTable;
+    DWORD dwSize = 0;
+    DWORD dwRetVal = 0;
+    IN_ADDR IPAddr;
 
-// Make an initial call to GetInterfaceInfo to get
-// the necessary size in the ulOutBufLen variable
-    dwRetVal = GetInterfaceInfo(NULL, &ulOutBufLen);
-    if (dwRetVal == ERROR_INSUFFICIENT_BUFFER) {
-        pInfo = (IP_INTERFACE_INFO *) MALLOC(ulOutBufLen);
-        if (pInfo == NULL) {
-            printf
-                ("Unable to allocate memory needed to call GetInterfaceInfo\n");
+    /* Variables used to return error message */
+    LPVOID lpMsgBuf;
+
+    // Before calling AddIPAddress we use GetIpAddrTable to get
+    // an adapter to which we can add the IP.
+    pIPAddrTable = (MIB_IPADDRTABLE *) MALLOC(sizeof (MIB_IPADDRTABLE));
+
+    if (pIPAddrTable) {
+        // Make an initial call to GetIpAddrTable to get the
+        // necessary size into the dwSize variable
+        if (GetIpAddrTable(pIPAddrTable, &dwSize, 0) ==
+            ERROR_INSUFFICIENT_BUFFER) {
+            FREE(pIPAddrTable);
+            pIPAddrTable = (MIB_IPADDRTABLE *) MALLOC(dwSize);
+
+        }
+        if (pIPAddrTable == NULL) {
+            printf("Memory allocation failed for GetIpAddrTable\n");
             return 1;
         }
     }
-// Make a second call to GetInterfaceInfo to get
-// the actual data we need
-    dwRetVal = GetInterfaceInfo(pInfo, &ulOutBufLen);
-    if (dwRetVal == NO_ERROR) {
-        printf("Number of Adapters: %ld\n\n", pInfo->NumAdapters);
-        for (i = 0; i < pInfo->NumAdapters; i++) {
-            printf("Adapter Index[%d]: %ld\n", i,
-                   pInfo->Adapter[i].Index);
-            printf("Adapter Name[%d]: %ws\n\n", i,
-                   pInfo->Adapter[i].Name);
+    // Make a second call to GetIpAddrTable to get the
+    // actual data we want
+    if ( (dwRetVal = GetIpAddrTable( pIPAddrTable, &dwSize, 0 )) != NO_ERROR ) { 
+        printf("GetIpAddrTable failed with error %d\n", dwRetVal);
+        if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, dwRetVal, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),       // Default language
+                          (LPTSTR) & lpMsgBuf, 0, NULL)) {
+            cerr << "\tError: %s" << lpMsgBuf;
+            LocalFree(lpMsgBuf);
         }
-        iReturn = 0;
-    } else if (dwRetVal == ERROR_NO_DATA) {
-        printf
-            ("There are no network adapters with IPv4 enabled on the local system\n");
-        iReturn = 0;
-    } else {
-        printf("GetInterfaceInfo failed with error: %d\n", dwRetVal);
-        iReturn = 1;
+        return 1;
     }
 
-    FREE(pInfo);
-    return (iReturn);
+    for (i=0; i < (int) pIPAddrTable->dwNumEntries; i++) {
+        IPAddr.S_un.S_addr = (u_long) pIPAddrTable->table[i].dwAddr;
+        string ipaddr(inet_ntoa(IPAddr));
+        addresses.push_back(ipaddr);
+    }
+
+    if (pIPAddrTable) {
+        FREE(pIPAddrTable);
+        pIPAddrTable = NULL;
+    }
+
+    return 0;
 }
