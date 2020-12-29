@@ -2,7 +2,7 @@
 
 int main() { 
     string latest;
-    bool ret = getlatest("./samplefolder/", latest);
+    bool ret = getLatest("./samplefolder/", latest);
     if (ret) {
         cout << "The latest file is: " << latest << '\n';
     }

@@ -87,7 +87,7 @@ static bool getdate (string str, DateTime &dt) {
     return 1;
 }
 
-bool getlatest(string dirpath, string &latestfile) {
+bool getLatest(const string &dirpath, string &latestfile) {
     DateTime dt_latest, dt_compare;
     int datecounter = 0;
     

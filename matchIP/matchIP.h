@@ -6,4 +6,5 @@
 #   error "Unknown compiler"
 #endif
 
-bool matchAddr (const string& ip_addr, const vector<string>& ip_addresses);
+bool matchIP (const string& ip_addr);
+

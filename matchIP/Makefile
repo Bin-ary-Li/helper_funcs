@@ -5,18 +5,20 @@ else
 endif
 
 ifeq ($(detected_OS),Windows)
-	files := main.cpp winEnumIP.cpp findip.cpp
+	files := main.cpp winEnumIP.cpp matchIP.cpp
 	CC := cl
 	CFLAGS := /Fe:main
 	cleanup := \rm -f *.obj main.exe
 else ifeq ($(detected_OS),Linux) 
-	files := main.cpp unixEnumIP.cpp findip.cpp
+	files := main.cpp unixEnumIP.cpp matchIP.cpp
 	CC = g++
 	CFLAGS = -std=c++14 -o main.out
+	cleanup := \rm -f *.o main.out
 else ifeq ($(detected_OS),Darwin) 
-	files := main.cpp unixEnumIP.cpp findip.cpp
+	files := main.cpp unixEnumIP.cpp matchIP.cpp
 	CC = g++
 	CFLAGS = -std=c++14 -o main.out
+	cleanup := \rm -f *.o main.out
 else
 	echo "No recognizing OS"
 	exit 1

@@ -10,4 +10,4 @@ typedef struct datetime_ {
     int year, month, day, hour, minute, second;
 } DateTime;
 
-bool getlatest(string dirpath, string &latestfile);
+bool getLatest(const string &dirpath, string &latestfile);
