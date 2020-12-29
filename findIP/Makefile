@@ -10,11 +10,13 @@ ifeq ($(detected_OS),Windows)
 	CFLAGS := /Fe:main
 	cleanup := \rm -f *.obj main.exe
 else ifeq ($(detected_OS),Linux) 
+	files := main.cpp unixEnumIP.cpp findip.cpp
 	CC = g++
-	CFLAGS = -std=c++14
+	CFLAGS = -std=c++14 -o main.out
 else ifeq ($(detected_OS),Darwin) 
+	files := main.cpp unixEnumIP.cpp findip.cpp
 	CC = g++
-	CFLAGS = -std=c++14
+	CFLAGS = -std=c++14 -o main.out
 else
 	echo "No recognizing OS"
 	exit 1
