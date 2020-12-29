@@ -1,5 +1,5 @@
 ## parseCSV()
-`int parseCSV(string filename, CSVData &csvdata)`
+`int parseCSV(const string& filename, CSVData &csvdata)`
 
 ```
 typedef struct csvdata_ {
@@ -15,4 +15,4 @@ The function return 0 upon success, others when fail.
 
 ### Example
 
-See `main.cpp` for an example of usage, which can be compiled by running `make`, then execute the output program `./readcsv`. 
+See `main.cpp` for an example of usage, which can be compiled by running `make`, then execute the output program `./main.out`. 

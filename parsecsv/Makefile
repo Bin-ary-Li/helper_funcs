@@ -10,4 +10,4 @@ main.o: main.cpp readcsv.h
 readcsv.o: readcsv.h
 
 clean:
-	\rm -f *.o readcsv *~ *#
+	\rm -f *.o main.out

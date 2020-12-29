@@ -36,7 +36,7 @@ static int line2vec_double(string line, string delim, vector<double> &vec) {
 }
 
 // return 0 upon success
-int parseCSV(string filename, CSVData &csvdata) {
+int parseCSV(const string& filename, CSVData &csvdata) {
     ifstream fp(filename);
     if(!fp.is_open()) {
         cerr << "failed to open " << filename << '\n';

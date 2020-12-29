@@ -9,4 +9,4 @@ typedef struct csvdata_ {
     vector<vector<double> > vec2d;
 } CSVData;
 
-void parseCSV(string filename, CSVData &csvdata);
+int parseCSV(const string& filename, CSVData &csvdata);
